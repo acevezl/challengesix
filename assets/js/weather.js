@@ -107,9 +107,7 @@ function paintCurrentWeather(weather) {
     
     // Convert Kevlin to F or C
     // No need to call the API again for different scales, it's easier to use math
-    currentTemperature = tempScale === 'C' ? 
-        weather.current.temp * (9 / 5) + 32 :
-        weather.current.temp;
+    currentTemperature = weather.current.temp;
 
     // Update the temperature
     var currentTempEl = document.querySelector('#current-temp');    
@@ -122,11 +120,9 @@ function paintCurrentWeather(weather) {
     
     // Add additional weather elements
     //Feels like
-    feelsLike = tempScale === 'C' ? 
-        weather.current.feels_like * (9 / 5) + 32 :
-        weather.current.feels_like;
+    feelsLike = weather.current.feels_like;
     var feelsLikeEl = document.querySelector('#feels-like');
-    feelsLikeEl.innerHTML = feelsLike + '&deg; ' + tempScale;
+    feelsLikeEl.innerHTML = Math.round(feelsLike*10)/10 + '&deg; ' + tempScale;
 
     var humidityEl = document.querySelector('#humidity');
     humidityEl.innerText = weather.current.humidity + '%';
@@ -222,6 +218,24 @@ function showPosition(position) {
     getCurrentWeatherByCoordinates(currentLocation);
 }
 
+function switchTemperatureUnits() {
+    var switchUnitsBtn = document.querySelector('#switch-temp');
+
+    if (units === 'imperial') {
+        tempScale = 'C';
+        units = 'metric';
+        speedScale = 'm/s';
+        switchUnitsBtn.innerText = 'Switch to imperial';
+    } else {
+        tempScale = 'F';
+        units = 'imperial';
+        speedScale = 'mph';
+        switchUnitsBtn.innerText = 'Switch to metric';
+    }
+    
+    getCurrentWeatherByCoordinates(currentLocation);
+}
+
 function initialize() {
     // Add event listener to city list items
     var cities = document.querySelectorAll('.city');
@@ -233,6 +247,10 @@ function initialize() {
     // Add event listener to search bar
     var searchBar = document.querySelector('#search-button');
     searchBar.addEventListener('click', getCurrentWeatherByQuery);
+
+    // Add event listener to switch units
+    var switchUnitsBtn = document.querySelector('#switch-temp');
+    switchUnitsBtn.addEventListener('click', switchTemperatureUnits);
     // Get geolocation and call the weather API
     getGeoLocation();
 }
