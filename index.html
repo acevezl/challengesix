@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/css/styles.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <title>Weather Forecast</title>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark justify-content-between">
+        <a class="navbar-brand">Weather Now</a>
+        <form class="form-inline">
+          <input class="form-control mr-sm-2" type="search" placeholder="City or Zip Code" aria-label="Search">
+          <button class="btn btn-light my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </nav>
+    <!--
+    <div class="jumbotron">
+        <h1 class="display-4">Hello, traveler!</h1>
+        <p class="lead">It seems your browser is not allowing us to get your location.</p>
+        <hr class="my-4">
+        <p>Please refresh this window and click allow on the modal asking to share your location, or simply search for a city or zip code around the globe to get accurate real-time weather.</p>
+        <a class="btn btn-primary btn-lg" href="#" role="button">Refresh this Window!</a>
+    </div>
+    -->
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-3" id="current-weather">
+                <div class="card text-dark bg-dark mb-3" id="current-weather-card">
+                    <div class="d-flex justify-content-center m-5" id="current-weather-spinner">
+                        <div class="spinner-grow text-light" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                    <img class="card-img-top" src="./assets/images/01d.png" alt="Card image cap">
+                    <div class="card-body">
+                        <div class="container">
+                            <div class="row justify-content-between">
+                                <h3 class="text-light" id="#location">San Jose</h3>
+                                <h3 class="text-light"><span id="current-temp">72&deg;</span> <span>F</span> | <span>C</span></h3>
+                            </div>
+                        </div>
+                        <h6 class="card-title mb-2 text-muted">Apr 28th 2021</h6>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Feels like: 72&deg;</li>
+                            <li class="list-group-item">Precipitation: 0%</li>
+                            <li class="list-group-item">Humidity: 31%</li>
+                            <li class="list-group-item">Wind: 15 mph</li>
+                            <li class="list-group-item">Dew point: </li>
+                            <li class="list-group-item">UV Index: 15 mph</li>
+                            <li class="list-group-item">Visibility: 10 miles</li>
+                        </ul>
+                    </div>
+                  </div>
+            </div>
+            <div class="col-9" id="forecast-weather"></div>
+        </div>
+    </div>
+    <script src="assets/js/weather.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>  
+</body>
+</html>
