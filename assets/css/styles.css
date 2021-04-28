@@ -1,11 +1,22 @@
 body {
-    background-image: url('../images/background.jpg');
+    background-image: url('../images/bg-bike.svg');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
-    background-position: center;
+    background-position: bottom;
 }
 
-#current-weather{
+h2, h3 {
+    text-shadow: 2px 2px 5px #000;
+}
+
+#current-weather-card, #city-list, nav{
+    width:100%;
     min-width: 315px;
+}
+
+@media (min-width: 576px) {
+    #current-weather-card, #city-list {
+        min-width: 0;
+    }
 }

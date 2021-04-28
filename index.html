@@ -9,53 +9,86 @@
     <title>Weather Forecast</title>
 </head>
 <body>
-    <nav class="navbar navbar-dark bg-dark justify-content-between">
-        <a class="navbar-brand">Weather Now</a>
-        <form class="form-inline">
-          <input class="form-control mr-sm-2" type="search" placeholder="City or Zip Code" aria-label="Search">
-          <button class="btn btn-light my-2 my-sm-0" type="submit">Search</button>
-        </form>
-    </nav>
-    <!--
-    <div class="jumbotron">
-        <h1 class="display-4">Hello, traveler!</h1>
-        <p class="lead">It seems your browser is not allowing us to get your location.</p>
-        <hr class="my-4">
-        <p>Please refresh this window and click allow on the modal asking to share your location, or simply search for a city or zip code around the globe to get accurate real-time weather.</p>
-        <a class="btn btn-primary btn-lg" href="#" role="button">Refresh this Window!</a>
-    </div>
-    -->
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-3" id="current-weather">
-                <div class="card text-dark bg-dark mb-3" id="current-weather-card">
-                    <div class="d-flex justify-content-center m-5" id="current-weather-spinner">
-                        <div class="spinner-grow text-light" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Weather Fetch</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" href="#">Switch to Celsius</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Popular cities...
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="#">London</a></li>
+                  <li><a class="dropdown-item" href="#">New York</a></li>
+                  <li><a class="dropdown-item" href="#">Paris</a></li>
+                  <li><a class="dropdown-item" href="#">Moscow</a></li>
+                  <li><a class="dropdown-item" href="#">Tokyo</a></li>
+                  <li><a class="dropdown-item" href="#">Dubai</a></li>
+                  <li><a class="dropdown-item" href="#">Singapore</a></li>
+                  <li><a class="dropdown-item" href="#">Barcelona</a></li>
+                  <li><a class="dropdown-item" href="#">Mexico City</a></li>
+                  <li><a class="dropdown-item" href="#">Delhi</a></li>
+                  <li><a class="dropdown-item" href="#">North Pole</a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+              </li>
+            </ul>
+            <form class="d-flex">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+          </div>
+        </div>
+      </nav>
+    <div class="container-fluid justify-content-center">
+        <div class="row justify-content-between">
+            <div class="col-12 col-sm-5 col-md-4 col-lg-4 col-xl-3 mt-2" id="current">
+                <div class="card" id="current-weather-card">
+                    <img class="card-img-top" id="weather-icon" src="./assets/images/01d.png" alt="Card image cap">
+                    <div class="card-img-overlay text-light align-bottom">
+                        <h2 id="location">Your Location</h2>
+                        <h3><span id="current-temp"></span> <span id="temp-scale"></span></h3>
                     </div>
-                    <img class="card-img-top" src="./assets/images/01d.png" alt="Card image cap">
-                    <div class="card-body">
-                        <div class="container">
-                            <div class="row justify-content-between">
-                                <h3 class="text-light" id="#location">San Jose</h3>
-                                <h3 class="text-light"><span id="current-temp">72&deg;</span> <span>F</span> | <span>C</span></h3>
-                            </div>
-                        </div>
-                        <h6 class="card-title mb-2 text-muted">Apr 28th 2021</h6>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">Feels like: 72&deg;</li>
-                            <li class="list-group-item">Precipitation: 0%</li>
-                            <li class="list-group-item">Humidity: 31%</li>
-                            <li class="list-group-item">Wind: 15 mph</li>
-                            <li class="list-group-item">Dew point: </li>
-                            <li class="list-group-item">UV Index: 15 mph</li>
-                            <li class="list-group-item">Visibility: 10 miles</li>
-                        </ul>
+                    <div class="card-header">
+                        <h6 id="current-date"></h6>
                     </div>
-                  </div>
+                    <div class="card-body" id="weather-details">
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Feels like: <span id="feels-like">Unknown</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Humidity: <span id="humidity">Unknown</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Wind Speed: <span id="wind-speed">Unknown</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                UV Index: 
+                                <span class="badge bg-primary rounded-pill bg-light" id="uv-index">Unknown</span>
+                              </li>
+                          </ul>
+                    </div>
+                </div>
             </div>
-            <div class="col-9" id="forecast-weather"></div>
+            <div class="col-12 col-sm-7 col-md-8 col-lg-8 col-xl-9 mt-2" id="forecast">
+                <div class="jumbotron">
+                    <h1 class="display-4">Hello, traveler!</h1>
+                    <p class="lead">We are fetching your local weather!</p>
+                    <hr class="my-4">
+                    <p>If you are still seeing this message, please refresh this window and click allow on the modal asking to share your location, or simply search for a city or zip code around the globe to get accurate real-time weather.</p>
+                    <a class="btn btn-primary btn-lg btn-dark" href="#" role="button">Refresh this Window!</a>
+                </div> 
+            </div>
         </div>
     </div>
     <script src="assets/js/weather.js"></script>
