@@ -1,6 +1,6 @@
 var tempScale = 'F';
+var units = 'imperial';
 var speedScale = 'mph';
-const K = 273.15;
 var currentTemperature = 0;
 var feelsLike = 0;
 
@@ -24,7 +24,58 @@ function getCurrentWeatherByCoordinates() {
         storeWeatherData(weatherResponse);
         return fetch(
             'http://api.openweathermap.org/data/2.5/onecall?lat='+currentLocation.lat+'&lon='+currentLocation.lon+
-            '&units=imperial&exclude=minutely,hourly&appid=655d5689eeeddab12919a0a91fabf64a'
+            '&units='+units+'&exclude=minutely,hourly&appid=655d5689eeeddab12919a0a91fabf64a'
+        )
+        .then(function(weatherResponse) {
+            return weatherResponse.json();
+        })
+        .then(function(weatherResponse){
+            paintCurrentWeather(weatherResponse);
+            return weatherResponse;
+        });
+    });
+}
+
+function getCurrentWeatherByCity(target) {
+    var city = target.srcElement.innerText;
+    fetch(
+        'http://api.openweathermap.org/data/2.5/weather?q='+city+
+        '&appid=655d5689eeeddab12919a0a91fabf64a'
+    )
+    .then(function(weatherResponse) {
+        return weatherResponse.json();
+    })
+    .then(function(weatherResponse){
+        storeWeatherData(weatherResponse);
+        return fetch(
+            'http://api.openweathermap.org/data/2.5/onecall?lat='+currentLocation.lat+'&lon='+currentLocation.lon+
+            '&units='+units+'&exclude=minutely,hourly&appid=655d5689eeeddab12919a0a91fabf64a'
+        )
+        .then(function(weatherResponse) {
+            return weatherResponse.json();
+        })
+        .then(function(weatherResponse){
+            paintCurrentWeather(weatherResponse);
+            return weatherResponse;
+        });
+    });
+}
+
+function getCurrentWeatherByQuery (target) {
+    console.log(target);
+    var city = target.srcElement.innerText;
+    fetch(
+        'http://api.openweathermap.org/data/2.5/weather?q='+city+
+        '&appid=655d5689eeeddab12919a0a91fabf64a'
+    )
+    .then(function(weatherResponse) {
+        return weatherResponse.json();
+    })
+    .then(function(weatherResponse){
+        storeWeatherData(weatherResponse);
+        return fetch(
+            'http://api.openweathermap.org/data/2.5/onecall?lat='+currentLocation.lat+'&lon='+currentLocation.lon+
+            '&units='+units+'&exclude=minutely,hourly&appid=655d5689eeeddab12919a0a91fabf64a'
         )
         .then(function(weatherResponse) {
             return weatherResponse.json();
@@ -38,6 +89,8 @@ function getCurrentWeatherByCoordinates() {
 
 function storeWeatherData(weather) {
     locationName = weather.name;
+    currentLocation.lat = weather.coord.lat;
+    currentLocation.lon = weather.coord.lon;
 }
 
 function paintCurrentWeather(weather) {
@@ -96,9 +149,64 @@ function paintCurrentWeather(weather) {
         uviEl.innerHTML = weather.current.uvi + ' &#128128;';
     }
     
+    var currentWeather = document.querySelector('#current');
+    currentWeather.setAttribute('style', '');
+
     // Now print the next five days of forecast
-    var forecastColumn = document.querySelector('#forecast');
-    forecastColumn.innerHTML = '';
+    var forecastPanel = document.querySelector('#forecast');
+    forecastPanel.innerHTML = '';
+
+    var forecastGroup = document.createElement('div');
+    forecastGroup.className = 'row content-fluid';
+    forecastPanel.appendChild(forecastGroup);
+    
+
+    for (i=1; i<weather.daily.length-1; i++) {
+        var forecastCard = document.createElement('div');
+        forecastCard.className = 'card m-1 shadow';
+
+        var forecastIcon = document.createElement('img');
+        forecastIcon.className = 'card-img-top';
+        forecastIcon.setAttribute('src', './assets/images/'+weather.daily[i].weather[0].icon + '.png');
+
+        var forecastDetails = document.createElement('div');
+        forecastDetails.className = 'card-img-overlay text-light';
+        
+        var forecastTemp = document.createElement('h2');
+        forecastTemp.className = 'header-shadow';
+        forecastTemp.innerHTML = Math.round(weather.daily[i].temp.day*10)/10 + '&deg; ' + tempScale;
+        
+        var forecastTempMin = document.createElement('p');
+        forecastTempMin.className = 'header-shadow m-0';
+        forecastTempMin.innerHTML = 'Min: ' + Math.round(weather.daily[i].temp.min*10)/10 + '&deg; ' + tempScale;
+
+        var forecastTempMax = document.createElement('p');
+        forecastTempMax.className = 'header-shadow m-0';
+        forecastTempMax.innerHTML = 'Max: ' + Math.round(weather.daily[i].temp.max*10)/10 + '&deg; ' + tempScale;
+
+        var forecastHumidity = document.createElement('p');
+        forecastHumidity.className = 'header-shadow m-0';
+        forecastHumidity.innerText = 'Humidity: ' + weather.daily[i].humidity + '%';
+
+        var forecastHeader = document.createElement('div');
+        forecastHeader.className = 'card-header';
+        
+        var forecastDate = new Date(weather.daily[i].dt*1000);
+
+        var forecastDateEl = document.createElement('h6');
+        forecastDateEl.innerText = forecastDate.toLocaleDateString('en-US',{weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'});
+        forecastHeader.appendChild(forecastDateEl);
+
+        forecastCard.appendChild(forecastIcon);
+        forecastCard.appendChild(forecastDetails);
+        forecastDetails.appendChild(forecastTemp);
+        forecastDetails.appendChild(forecastTempMin);
+        forecastDetails.appendChild(forecastTempMax);
+        forecastDetails.appendChild(forecastHumidity);
+        forecastCard.appendChild(forecastHeader);
+
+        forecastGroup.appendChild (forecastCard);
+    }
 }
 
 function getGeoLocation(){
@@ -116,6 +224,15 @@ function showPosition(position) {
 }
 
 function initialize() {
+    // Add event listener to city list items
+    var cities = document.querySelectorAll('.city');
+    
+    Array.from(cities).forEach(function(element){
+        element.addEventListener('click', getCurrentWeatherByCity);
+    })
+
+    // Add event listener to search bar
+    var searchBar = document.querySelector('');
     // Get geolocation and call the weather API
     getGeoLocation();
 }

@@ -6,17 +6,11 @@ body {
     background-position: bottom;
 }
 
-h2, h3 {
-    text-shadow: 2px 2px 5px #000;
+.header-shadow {
+    text-shadow: 2px 2px 3px #000;
 }
 
-#current-weather-card, #city-list, nav{
-    width:100%;
-    min-width: 315px;
-}
-
-@media (min-width: 576px) {
-    #current-weather-card, #city-list {
-        min-width: 0;
-    }
+#forecast {
+    display: flex;
+    justify-content: space-around;
 }

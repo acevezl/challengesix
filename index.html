@@ -9,7 +9,7 @@
     <title>Weather Forecast</title>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">Weather Fetch</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,38 +25,35 @@
                   Popular cities...
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="#">London</a></li>
-                  <li><a class="dropdown-item" href="#">New York</a></li>
-                  <li><a class="dropdown-item" href="#">Paris</a></li>
-                  <li><a class="dropdown-item" href="#">Moscow</a></li>
-                  <li><a class="dropdown-item" href="#">Tokyo</a></li>
-                  <li><a class="dropdown-item" href="#">Dubai</a></li>
-                  <li><a class="dropdown-item" href="#">Singapore</a></li>
-                  <li><a class="dropdown-item" href="#">Barcelona</a></li>
-                  <li><a class="dropdown-item" href="#">Mexico City</a></li>
-                  <li><a class="dropdown-item" href="#">Delhi</a></li>
-                  <li><a class="dropdown-item" href="#">North Pole</a></li>
+                  <li><a class="dropdown-item city" href="#">London</a></li>
+                  <li><a class="dropdown-item city" href="#">New York</a></li>
+                  <li><a class="dropdown-item city" href="#">Paris</a></li>
+                  <li><a class="dropdown-item city" href="#">Moscow</a></li>
+                  <li><a class="dropdown-item city" href="#">Tokyo</a></li>
+                  <li><a class="dropdown-item city" href="#">Dubai</a></li>
+                  <li><a class="dropdown-item city" href="#">Singapore</a></li>
+                  <li><a class="dropdown-item city" href="#">Barcelona</a></li>
+                  <li><a class="dropdown-item city" href="#">Mexico City</a></li>
+                  <li><a class="dropdown-item city" href="#">Delhi</a></li>
+                  <li><a class="dropdown-item city" href="#">North Pole</a></li>
                 </ul>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
               </li>
             </ul>
             <form class="d-flex">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Search</button>
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search-bar">
+              <button class="btn btn-dark" type="submit" id="search-button">Search</button>
             </form>
           </div>
         </div>
       </nav>
     <div class="container-fluid justify-content-center">
-        <div class="row justify-content-between">
-            <div class="col-12 col-sm-5 col-md-4 col-lg-4 col-xl-3 mt-2" id="current">
-                <div class="card" id="current-weather-card">
+        <div class="row content-fluid">
+            <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-2" style="display:none;" id="current">
+                <div class="card shadow" id="current-weather-card">
                     <img class="card-img-top" id="weather-icon" src="./assets/images/01d.png" alt="Card image cap">
                     <div class="card-img-overlay text-light align-bottom">
-                        <h2 id="location">Your Location</h2>
-                        <h3><span id="current-temp"></span> <span id="temp-scale"></span></h3>
+                        <h2 class="header-shadow" id="location">Your Location</h2>
+                        <h3><span class="header-shadow" id="current-temp"></span> <span id="temp-scale"></span></h3>
                     </div>
                     <div class="card-header">
                         <h6 id="current-date"></h6>
@@ -80,7 +77,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-sm-7 col-md-8 col-lg-8 col-xl-9 mt-2" id="forecast">
+            <div class="col-12 col-sm-6 col-md-6 col-lg-8 col-xl-9 mt-2" id="forecast">
                 <div class="jumbotron">
                     <h1 class="display-4">Hello, traveler!</h1>
                     <p class="lead">We are fetching your local weather!</p>
