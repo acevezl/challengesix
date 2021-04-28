@@ -62,8 +62,7 @@ function getCurrentWeatherByCity(target) {
 }
 
 function getCurrentWeatherByQuery (target) {
-    console.log(target);
-    var city = target.srcElement.innerText;
+    var city = target.srcElement.previousElementSibling.value;
     fetch(
         'http://api.openweathermap.org/data/2.5/weather?q='+city+
         '&appid=655d5689eeeddab12919a0a91fabf64a'
@@ -232,7 +231,8 @@ function initialize() {
     })
 
     // Add event listener to search bar
-    var searchBar = document.querySelector('');
+    var searchBar = document.querySelector('#search-button');
+    searchBar.addEventListener('click', getCurrentWeatherByQuery);
     // Get geolocation and call the weather API
     getGeoLocation();
 }
