@@ -14,7 +14,7 @@ var locationName = '';
 
 function getCurrentWeatherByCoordinates() {
     fetch(
-        'http://api.openweathermap.org/data/2.5/weather?lat='+currentLocation.lat+'&lon='+currentLocation.lon+
+        'https://api.openweathermap.org/data/2.5/weather?lat='+currentLocation.lat+'&lon='+currentLocation.lon+
         '&appid=655d5689eeeddab12919a0a91fabf64a'
     )
     .then(function(weatherResponse) {
@@ -23,7 +23,7 @@ function getCurrentWeatherByCoordinates() {
     .then(function(weatherResponse){
         storeWeatherData(weatherResponse);
         return fetch(
-            'http://api.openweathermap.org/data/2.5/onecall?lat='+currentLocation.lat+'&lon='+currentLocation.lon+
+            'https://api.openweathermap.org/data/2.5/onecall?lat='+currentLocation.lat+'&lon='+currentLocation.lon+
             '&units='+units+'&exclude=minutely,hourly&appid=655d5689eeeddab12919a0a91fabf64a'
         )
         .then(function(weatherResponse) {
@@ -39,7 +39,7 @@ function getCurrentWeatherByCoordinates() {
 function getCurrentWeatherByCity(target) {
     var city = target.srcElement.innerText;
     fetch(
-        'http://api.openweathermap.org/data/2.5/weather?q='+city+
+        'https://api.openweathermap.org/data/2.5/weather?q='+city+
         '&appid=655d5689eeeddab12919a0a91fabf64a'
     )
     .then(function(weatherResponse) {
@@ -48,7 +48,7 @@ function getCurrentWeatherByCity(target) {
     .then(function(weatherResponse){
         storeWeatherData(weatherResponse);
         return fetch(
-            'http://api.openweathermap.org/data/2.5/onecall?lat='+currentLocation.lat+'&lon='+currentLocation.lon+
+            'https://api.openweathermap.org/data/2.5/onecall?lat='+currentLocation.lat+'&lon='+currentLocation.lon+
             '&units='+units+'&exclude=minutely,hourly&appid=655d5689eeeddab12919a0a91fabf64a'
         )
         .then(function(weatherResponse) {
@@ -65,7 +65,7 @@ function getCurrentWeatherByQuery (target) {
     var city = target.srcElement.previousElementSibling.value;
     try {
         fetch(
-            'http://api.openweathermap.org/data/2.5/weather?q='+city+
+            'https://api.openweathermap.org/data/2.5/weather?q='+city+
             '&appid=655d5689eeeddab12919a0a91fabf64a'
         )
         .then(function(weatherResponse) {
@@ -74,7 +74,7 @@ function getCurrentWeatherByQuery (target) {
         .then(function(weatherResponse){  
             storeWeatherData(weatherResponse);
             return fetch(
-                'http://api.openweathermap.org/data/2.5/onecall?lat='+currentLocation.lat+'&lon='+currentLocation.lon+
+                'https://api.openweathermap.org/data/2.5/onecall?lat='+currentLocation.lat+'&lon='+currentLocation.lon+
                 '&units='+units+'&exclude=minutely,hourly&appid=655d5689eeeddab12919a0a91fabf64a'
             )
             .then(function(weatherResponse) {
