@@ -63,27 +63,53 @@ function getCurrentWeatherByCity(target) {
 
 function getCurrentWeatherByQuery (target) {
     var city = target.srcElement.previousElementSibling.value;
-    fetch(
-        'http://api.openweathermap.org/data/2.5/weather?q='+city+
-        '&appid=655d5689eeeddab12919a0a91fabf64a'
-    )
-    .then(function(weatherResponse) {
-        return weatherResponse.json();
-    })
-    .then(function(weatherResponse){
-        storeWeatherData(weatherResponse);
-        return fetch(
-            'http://api.openweathermap.org/data/2.5/onecall?lat='+currentLocation.lat+'&lon='+currentLocation.lon+
-            '&units='+units+'&exclude=minutely,hourly&appid=655d5689eeeddab12919a0a91fabf64a'
+    try {
+        fetch(
+            'http://api.openweathermap.org/data/2.5/weather?q='+city+
+            '&appid=655d5689eeeddab12919a0a91fabf64a'
         )
         .then(function(weatherResponse) {
             return weatherResponse.json();
         })
-        .then(function(weatherResponse){
-            paintCurrentWeather(weatherResponse);
-            return weatherResponse;
+        .then(function(weatherResponse){  
+            storeWeatherData(weatherResponse);
+            return fetch(
+                'http://api.openweathermap.org/data/2.5/onecall?lat='+currentLocation.lat+'&lon='+currentLocation.lon+
+                '&units='+units+'&exclude=minutely,hourly&appid=655d5689eeeddab12919a0a91fabf64a'
+            )
+            .then(function(weatherResponse) {
+                return weatherResponse.json();
+            })
+            .then(function(weatherResponse){
+                paintCurrentWeather(weatherResponse);
+                return weatherResponse;
+            })
+            .catch(function(error) {
+                console.log('This is from the inside fetch catch' + error);
+                reportLocationNotFound();
+            });
+        })
+        .catch(function(error) {
+            console.log('This is from the outside fetch catch' + error);
+            reportLocationNotFound();
         });
-    });
+    } catch (error) {
+        console.log('This is from the try catch' + error);
+        reportLocationNotFound();
+    }
+    
+    /*
+    fetch ('http://www.NotaURL.com')
+    .then (function(data) {
+        return data.JSON;
+    })
+    .then (function(dataJSONified) {
+        return dataJSONified;
+    })
+    .catch (function() {
+        reportLocationNotFound();
+    });*/
+    
 }
 
 function storeWeatherData(weather) {
@@ -234,6 +260,11 @@ function switchTemperatureUnits() {
     }
     
     getCurrentWeatherByCoordinates(currentLocation);
+}
+
+function reportLocationNotFound() {
+    // Show error modal
+    alert ("The location entered does not exist, please try again");
 }
 
 function initialize() {
