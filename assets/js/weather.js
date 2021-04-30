@@ -227,7 +227,7 @@ function printForecast(weather) {
         var forecastHeader = document.createElement('div');
         forecastHeader.className = 'card-header';
         
-        var forecastDate = new Date(weather.daily[i].dt00);
+        var forecastDate = new Date(weather.daily[i].dt*1000);
 
         var forecastDateEl = document.createElement('h6');
         forecastDateEl.innerText = forecastDate.toLocaleDateString('en-US',{weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'});
