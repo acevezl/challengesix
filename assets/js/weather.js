@@ -3,11 +3,12 @@ var units = 'imperial';
 var speedScale = 'mph';
 var currentTemperature = 0;
 var feelsLike = 0;
+var previousLocations = localStorage.getItem('previousLocations')? JSON.parse(localStorage.getItem('previousLocations')):[];
 
-
+// Default location is San Jose
 var currentLocation = {
-    lat: 0,
-    lon: 0
+    lat: 37.3394,
+    lon: -121.895
 }
 
 var locationName = '';
@@ -36,42 +37,17 @@ function getCurrentWeatherByCoordinates() {
     });
 }
 
-function getCurrentWeatherByCity(target) {
-    var city = target.srcElement.innerText;
-    fetch(
-        'https://api.openweathermap.org/data/2.5/weather?q='+city+
-        '&appid=655d5689eeeddab12919a0a91fabf64a'
-    )
-    .then(function(weatherResponse) {
-        return weatherResponse.json();
-    })
-    .then(function(weatherResponse){
-        storeWeatherData(weatherResponse);
-        return fetch(
-            'https://api.openweathermap.org/data/2.5/onecall?lat='+currentLocation.lat+'&lon='+currentLocation.lon+
-            '&units='+units+'&exclude=minutely,hourly&appid=655d5689eeeddab12919a0a91fabf64a'
-        )
-        .then(function(weatherResponse) {
-            return weatherResponse.json();
-        })
-        .then(function(weatherResponse){
-            paintCurrentWeather(weatherResponse);
-            return weatherResponse;
-        });
-    });
-}
-
-function getCurrentWeatherByQuery (target) {
-    var city = target.srcElement.previousElementSibling.value;
+function getCurrentWeatherByQuery(q) {
     try {
         fetch(
-            'https://api.openweathermap.org/data/2.5/weather?q='+city+
+            'https://api.openweathermap.org/data/2.5/weather?q='+q+
             '&appid=655d5689eeeddab12919a0a91fabf64a'
         )
         .then(function(weatherResponse) {
             return weatherResponse.json();
         })
         .then(function(weatherResponse){  
+            console.log(weatherResponse);
             storeWeatherData(weatherResponse);
             return fetch(
                 'https://api.openweathermap.org/data/2.5/onecall?lat='+currentLocation.lat+'&lon='+currentLocation.lon+
@@ -97,19 +73,18 @@ function getCurrentWeatherByQuery (target) {
         console.log('This is from the try catch' + error);
         reportLocationNotFound();
     }
-    
-    /*
-    fetch ('http://www.NotaURL.com')
-    .then (function(data) {
-        return data.JSON;
-    })
-    .then (function(dataJSONified) {
-        return dataJSONified;
-    })
-    .catch (function() {
-        reportLocationNotFound();
-    });*/
-    
+}
+
+function getCurrentWeatherByCity(target) {
+    target.preventDefault();
+    var city = target.srcElement.innerText;
+    getCurrentWeatherByQuery(city);
+}
+
+function getCurrentWeatherBySearch (target) {
+    target.preventDefault();
+    var city = target.srcElement.previousElementSibling.value;
+    getCurrentWeatherByQuery(city);
 }
 
 function storeWeatherData(weather) {
@@ -120,7 +95,21 @@ function storeWeatherData(weather) {
 
 function paintCurrentWeather(weather) {
     // Paints current weather in the current weather card
-    console.log(weather);
+    // Only store previous location if it hasn't been used
+    var i = previousLocations.indexOf(locationName);
+    
+    if (i != -1) {
+        removePreviousCity(i);
+    }     
+    // If we have 10 locations, remove the oldest one
+    if (previousLocations.length>6) {
+        removeOldestCity();
+    }
+    addPreviousCity();
+    console.log(previousLocations);
+    
+    localStorage.setItem('previousLocations', JSON.stringify(previousLocations));
+
 
     // Update current weather icon
     var cardImageEl = document.querySelector('#weather-icon');
@@ -137,7 +126,7 @@ function paintCurrentWeather(weather) {
 
     // Update the temperature
     var currentTempEl = document.querySelector('#current-temp');    
-    currentTempEl.innerText = Math.round(currentTemperature*10)/10 + '° ' + tempScale;
+    currentTempEl.innerText = Math.round(currentTemperature) + '° ' + tempScale;
     
     // Show date on card - Need to finagle the unix timestamp to date
     var currentDate = new Date(weather.current.dt*1000);
@@ -148,7 +137,7 @@ function paintCurrentWeather(weather) {
     //Feels like
     feelsLike = weather.current.feels_like;
     var feelsLikeEl = document.querySelector('#feels-like');
-    feelsLikeEl.innerHTML = Math.round(feelsLike*10)/10 + '&deg; ' + tempScale;
+    feelsLikeEl.innerHTML = Math.round(feelsLike) + '&deg; ' + tempScale;
 
     var humidityEl = document.querySelector('#humidity');
     humidityEl.innerText = weather.current.humidity + '%';
@@ -169,20 +158,45 @@ function paintCurrentWeather(weather) {
         uviEl.className = 'badge bg-primary rounded-pill bg-danger';
         uviEl.innerHTML = weather.current.uvi + ' &#128128;';
     }
-    
-    var currentWeather = document.querySelector('#current');
-    currentWeather.setAttribute('style', '');
 
+    printForecast(weather);
+
+}
+
+function addPreviousCity() {
+    previousLocations.push(locationName);
+    printPreviousCities();
+}
+
+function removePreviousCity(index) {
+    previousLocations.splice(index, 1);
+    printPreviousCities();
+}
+
+function removeOldestCity() {
+    previousLocations.shift();
+    printPreviousCities();
+}
+
+function printPreviousCities() {
+    var previousCitiesEl = document.querySelector('#previous-locations');
+    previousCitiesEl.innerHTML = '';
+    for (var i=previousLocations.length-1;i>=0;i--){
+        var cityEl = document.createElement('li');
+        cityEl.className = 'list-group-item';
+        cityEl.setAttribute('id', 'city-'+i);
+        cityEl.innerText = previousLocations[i];
+        cityEl.addEventListener('click',getCurrentWeatherByCity);
+        previousCitiesEl.appendChild(cityEl);
+    };
+}
+
+function printForecast(weather) {
     // Now print the next five days of forecast
     var forecastPanel = document.querySelector('#forecast');
     forecastPanel.innerHTML = '';
-
-    var forecastGroup = document.createElement('div');
-    forecastGroup.className = 'row content-fluid';
-    forecastPanel.appendChild(forecastGroup);
     
-
-    for (i=1; i<weather.daily.length-1; i++) {
+    for (var i=1; i<weather.daily.length-1; i++) {
         var forecastCard = document.createElement('div');
         forecastCard.className = 'card m-1 shadow';
 
@@ -195,15 +209,15 @@ function paintCurrentWeather(weather) {
         
         var forecastTemp = document.createElement('h2');
         forecastTemp.className = 'header-shadow';
-        forecastTemp.innerHTML = Math.round(weather.daily[i].temp.day*10)/10 + '&deg; ' + tempScale;
+        forecastTemp.innerHTML = Math.round(weather.daily[i].temp.day) + '&deg; ' + tempScale;
         
         var forecastTempMin = document.createElement('p');
         forecastTempMin.className = 'header-shadow m-0';
-        forecastTempMin.innerHTML = 'Min: ' + Math.round(weather.daily[i].temp.min*10)/10 + '&deg; ' + tempScale;
+        forecastTempMin.innerHTML = 'Min: ' + Math.round(weather.daily[i].temp.min) + '&deg; ' + tempScale;
 
         var forecastTempMax = document.createElement('p');
         forecastTempMax.className = 'header-shadow m-0';
-        forecastTempMax.innerHTML = 'Max: ' + Math.round(weather.daily[i].temp.max*10)/10 + '&deg; ' + tempScale;
+        forecastTempMax.innerHTML = 'Max: ' + Math.round(weather.daily[i].temp.max) + '&deg; ' + tempScale;
 
         var forecastHumidity = document.createElement('p');
         forecastHumidity.className = 'header-shadow m-0';
@@ -212,7 +226,7 @@ function paintCurrentWeather(weather) {
         var forecastHeader = document.createElement('div');
         forecastHeader.className = 'card-header';
         
-        var forecastDate = new Date(weather.daily[i].dt*1000);
+        var forecastDate = new Date(weather.daily[i].dt00);
 
         var forecastDateEl = document.createElement('h6');
         forecastDateEl.innerText = forecastDate.toLocaleDateString('en-US',{weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'});
@@ -226,7 +240,7 @@ function paintCurrentWeather(weather) {
         forecastDetails.appendChild(forecastHumidity);
         forecastCard.appendChild(forecastHeader);
 
-        forecastGroup.appendChild (forecastCard);
+        forecastPanel.appendChild (forecastCard);
     }
 }
 
@@ -277,13 +291,23 @@ function initialize() {
 
     // Add event listener to search bar
     var searchBar = document.querySelector('#search-button');
-    searchBar.addEventListener('click', getCurrentWeatherByQuery);
+    searchBar.addEventListener('click', getCurrentWeatherBySearch);
 
     // Add event listener to switch units
     var switchUnitsBtn = document.querySelector('#switch-temp');
     switchUnitsBtn.addEventListener('click', switchTemperatureUnits);
-    // Get geolocation and call the weather API
-    getGeoLocation();
+
+    if (previousLocations.length) {
+        // Paint previous cities list
+        printPreviousCities();
+
+        // Gets weather of last checked location
+        getCurrentWeatherByQuery(previousLocations[previousLocations.length-1]);
+    } else {
+
+        // Get geolocation and call the weather API
+        getGeoLocation();
+    }
 }
 
 initialize();

@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./assets/css/styles.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>  
     <title>Weather Forecast</title>
 </head>
@@ -41,74 +40,57 @@
                 </ul>
               </li>
             </ul>
-            <form class="d-flex col-6">
-              <input class="form-control me-2" type="search" placeholder="Enter a city or zip code" aria-label="Search" id="search-bar">
-              <button class="btn btn-dark" type="submit" id="search-button">Search</button>
-            </form>
           </div>
         </div>
     </nav>
     <div class="container-fluid justify-content-center">
         <div class="row content-fluid">
-            <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-2" style="display:none;" id="current">
+            <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-2">
+                <div class="card shadow">
+                    <div class="card-header">
+                      Your search history
+                    </div>
+                    <div class="card-body">
+                        <form class="d-flex mb-2">
+                            <input class="form-control mr-2" type="search" placeholder="Enter city or zip code" aria-label="Search" id="search-bar">
+                            <button class="btn btn-dark" type="submit" id="search-button">Search</button>
+                        </form>
+                        <ul class="list-group" id="previous-locations">
+                            
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-2" id="current">
                 <div class="card shadow" id="current-weather-card">
                     <img class="card-img-top" id="weather-icon" src="./assets/images/01d.png" alt="Card image cap">
                     <div class="card-img-overlay text-light align-bottom">
-                        <h2 class="header-shadow" id="location">Your Location</h2>
-                        <h3><span class="header-shadow" id="current-temp"></span> <span id="temp-scale"></span></h3>
+                        <h2><span class="header-shadow" id="current-temp">76&deg;F</span></h2>
                     </div>
                     <div class="card-header">
-                        <h6 id="current-date"></h6>
+                        <h5 id="location">Your Location</h5>
+                        <h6 id="current-date">Today's date</h6>
                     </div>
                     <div class="card-body" id="weather-details">
-                        <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Feels like: <span id="feels-like">Unknown</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Humidity: <span id="humidity">Unknown</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Wind Speed: <span id="wind-speed">Unknown</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                UV Index: 
-                                <span class="badge bg-primary rounded-pill bg-light" id="uv-index">Unknown</span>
-                              </li>
-                          </ul>
+                        <p>
+                        Feels like: <span id="feels-like">Unknown</span><br/>
+                        Humidity: <span id="humidity">Unknown</span><br/>
+                        Wind Speed: <span id="wind-speed">Unknown</span><br/>
+                        UV Index: <span class="badge bg-primary rounded-pill bg-light" id="uv-index">Unknown</span>
+                        </p>
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-sm-6 col-md-6 col-lg-8 col-xl-9 mt-2" id="forecast">
-                <div class="jumbotron">
-                    <h1 class="display-4">Hello, traveler!</h1>
-                    <p class="lead">We are fetching your local weather!</p>
-                    <hr class="my-4">
-                    <p>If you are still seeing this message, please refresh this window and click allow on the modal asking to share your location, or simply search for a city or zip code around the globe to get accurate real-time weather.</p>
-                    <a class="btn btn-primary btn-lg btn-dark" href="#" role="button">Refresh this Window!</a>
-                </div> 
-            </div>
-        </div>
-    </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-6 mt-2">
+                <div class="card shadow">
+                    <div class="card-header">
+                      Forecast
+                    </div>
+                    <div class="card-body content-fluid row" id="forecast">
 
-    <!-- Modal -->
-    <div class="modal fade" id="error-message" role="dialog" tabindex="-1">
-        <div class="modal-dialog">
-        
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Error</h4>
-                </div>
-                <div class="modal-body">
-                    <p>The city or location you are trying to search does not exist.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
-        
         </div>
     </div>
 

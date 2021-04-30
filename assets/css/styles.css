@@ -14,3 +14,7 @@ body {
     display: flex;
     justify-content: space-around;
 }
+
+#previous-locations .list-group-item {
+    cursor: pointer;
+}
