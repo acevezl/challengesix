@@ -65,18 +65,22 @@
                 <div class="card shadow" id="current-weather-card">
                     <img class="card-img-top" id="weather-icon" src="./assets/images/01d.png" alt="Card image cap">
                     <div class="card-img-overlay text-light align-bottom">
-                        <h2><span class="header-shadow" id="current-temp">76&deg;F</span></h2>
+                        <h2><span class="header-shadow" id="current-temp">--&deg;F</span></h2>
                     </div>
                     <div class="card-header">
-                        <h5 id="location">Your Location</h5>
-                        <h6 id="current-date">Today's date</h6>
+                        <h5 id="location">Loading location...</h5>
+                        <h6 id="current-date">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden"></span>
+                            </div>
+                        </h6>
                     </div>
                     <div class="card-body" id="weather-details">
                         <p>
-                        Feels like: <span id="feels-like">Unknown</span><br/>
-                        Humidity: <span id="humidity">Unknown</span><br/>
-                        Wind Speed: <span id="wind-speed">Unknown</span><br/>
-                        UV Index: <span class="badge bg-primary rounded-pill bg-light" id="uv-index">Unknown</span>
+                        Feels like: <span id="feels-like">Loading...</span><br/>
+                        Humidity: <span id="humidity">Loading...</span><br/>
+                        Wind Speed: <span id="wind-speed">Loading...</span><br/>
+                        UV Index: <span class="badge bg-primary rounded-pill bg-light" id="uv-index">Loading...</span>
                         </p>
                     </div>
                 </div>

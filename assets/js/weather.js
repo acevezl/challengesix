@@ -78,6 +78,7 @@ function getCurrentWeatherByQuery(q) {
 function getCurrentWeatherByCity(target) {
     target.preventDefault();
     var city = target.srcElement.innerText;
+    var spinner = document.querySelector('#spinner');
     getCurrentWeatherByQuery(city);
 }
 
