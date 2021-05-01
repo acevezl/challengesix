@@ -47,7 +47,6 @@ function getCurrentWeatherByQuery(q) {
             return weatherResponse.json();
         })
         .then(function(weatherResponse){  
-            console.log(weatherResponse);
             storeWeatherData(weatherResponse);
             return fetch(
                 'https://api.openweathermap.org/data/2.5/onecall?lat='+currentLocation.lat+'&lon='+currentLocation.lon+
@@ -96,6 +95,7 @@ function storeWeatherData(weather) {
 
 function paintCurrentWeather(weather) {
     // Paints current weather in the current weather card
+    console.log(weather);
     // Only store previous location if it hasn't been used
     var i = previousLocations.indexOf(locationName);
     
@@ -107,7 +107,6 @@ function paintCurrentWeather(weather) {
         removeOldestCity();
     }
     addPreviousCity();
-    console.log(previousLocations);
     
     localStorage.setItem('previousLocations', JSON.stringify(previousLocations));
 
@@ -121,11 +120,8 @@ function paintCurrentWeather(weather) {
     var locationEl = document.querySelector('#location');
     locationEl.innerText = locationName;
     
-    // Convert Kevlin to F or C
-    // No need to call the API again for different scales, it's easier to use math
-    currentTemperature = weather.current.temp;
-
     // Update the temperature
+    currentTemperature = weather.current.temp;
     var currentTempEl = document.querySelector('#current-temp');    
     currentTempEl.innerText = Math.round(currentTemperature) + '° ' + tempScale;
     
